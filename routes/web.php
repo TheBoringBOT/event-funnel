@@ -4,28 +4,43 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+//=== Frontend ===
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// home
+Route::get( '/', function () {
+	return Inertia::render( 'Welcome', [
+		'canLogin'       => Route::has( 'login' ),
+		'canRegister'    => Route::has( 'register' ),
+		'laravelVersion' => Application::VERSION,
+		'phpVersion'     => PHP_VERSION,
+	] );
+} );
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// these routes just render the componets
+// the actual functions to get the products data is found in api.php
+// get all products
+Route::get( '/products', [
+	\App\Http\Controllers\Api\ProductController::class,
+	'index'
+] )->name( 'products' );
 
-require __DIR__.'/auth.php';
+// get single Product via slug
+Route::get( '/product/{slug}', [
+	\App\Http\Controllers\Api\ProductController::class,
+	'show'
+] )->name( 'products.item' );
+
+//TODO change the orders routes to controllers once setup
+//order  checkout
+Route::inertia( '/checkout', 'Frontend/Order/Checkout' )->name( 'order.checkout' );
+
+//order summary
+Route::inertia( '/summary', 'Frontend/Order/Summary' )->name( 'order.summary' );
+
+
+//=== Backend ===
+Route::get( '/dashboard', function () {
+	return Inertia::render( 'Dashboard' );
+} )->middleware( [ 'auth', 'verified' ] )->name( 'dashboard' );
+
+require __DIR__ . '/auth.php';
