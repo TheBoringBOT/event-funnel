@@ -28,7 +28,7 @@ class CustomerController extends Controller {
 		] );
 
 		try {
-			$payment = $customer->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ) );
+			$payment = $customer->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ), [ 'receipt_email' => $request->input( 'email' ) ] );
 
 			$payment = $payment->asStripePaymentIntent();
 
@@ -36,6 +36,7 @@ class CustomerController extends Controller {
 				'transaction_id' => $payment->charges->data[0]->id,
 				'total'          => $payment->charges->data[0]->amount
 			] );
+
 
 			foreach ( json_decode( $request->input( 'cart' ), true ) as $item ) {
 				$order->products()->attach( $item['id'], [ 'quantity' => $item['quantity'] ] );
@@ -59,6 +60,7 @@ class CustomerController extends Controller {
 
 	// after successful purchase redirect customer to order summary page
 	public function orderSummary( $order ) {
+		dd( $customer->invoicePrice( $order ) );
 
 		return inertia( 'Frontend/Order/Summary', [ 'order' => $order ] );
 	}
