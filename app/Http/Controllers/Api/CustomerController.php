@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\Product;
 
 class CustomerController extends Controller {
 
@@ -38,23 +39,23 @@ class CustomerController extends Controller {
 
 			foreach ( json_decode( $request->input( 'cart' ), true ) as $item ) {
 				$order->products()->attach( $item['id'], [ 'quantity' => $item['quantity'] ] );
+				// updates product quantity
+				Product::where( 'id', $item['id'] )->decrement( 'available', $item['quantity'] );
 			}
+
 
 			$order->load( 'products' );
 
+
 			return $order;
 
-			//			return inertia( 'Frontend/Order/Summary', [
-			//				'order' => $order,
-			//
-			//
-			//			] );
 
 		} catch ( \Exception $e ) {
 			return response()->json( [ 'message' => $e->getMessage() ], 500 );
 		}
 
 	}
+
 
 	// after successful purchase redirect customer to order summary page
 	public function orderSummary( $order ) {
