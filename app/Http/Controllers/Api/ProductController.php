@@ -16,7 +16,7 @@ class ProductController extends Controller {
 		return Product::with( 'categories:id,name' )->get();
 	}
 
-	// get all products
+	// get single product
 	public function apiSingleProduct( $productId ) {
 		$product = Product::find( $productId );
 
