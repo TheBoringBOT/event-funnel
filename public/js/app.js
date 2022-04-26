@@ -24005,9 +24005,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _this2.$store.commit("updateOrder", response.data);
 
                     _this2.$store.dispatch("clearCart"); // Redirect to order summary
-                    // this.$inertia.get(`/summary`, {
-                    //     order: response,
-                    // });
 
 
                     _this2.$inertia.get("/summary");
@@ -25825,7 +25822,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* PROPS */
       , _hoisted_36), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.customer.city]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         required: "",
-        type: "email",
+        type: "text",
         id: "state",
         name: "state",
         "class": "w-full bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out",
@@ -25837,7 +25834,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* PROPS */
       , _hoisted_40), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.customer.state]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         required: "",
-        type: "email",
+        type: "text",
         id: "zip_code",
         name: "zip_code",
         "class": "w-full bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out",
@@ -26028,6 +26025,11 @@ var _hoisted_8 = {
 var _hoisted_9 = ["textContent"];
 var _hoisted_10 = ["textContent"];
 var _hoisted_11 = ["textContent"];
+var _hoisted_12 = {
+  key: 0,
+  "class": "text-red-600"
+};
+var _hoisted_13 = ["textContent"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
@@ -26070,7 +26072,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.formatCurrency(product.price))
         }, null, 8
         /* PROPS */
-        , _hoisted_11)])]);
+        , _hoisted_11), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<p v-text=\"product.location\"></p>"), product.available <= 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, "Sold Out")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+          key: 1,
+          textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(product.available)
+        }, null, 8
+        /* PROPS */
+        , _hoisted_13))])]);
       }), 128
       /* KEYED_FRAGMENT */
       ))]))])])];
