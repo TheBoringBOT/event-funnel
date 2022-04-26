@@ -9,12 +9,10 @@ class Order extends Model {
 	use HasFactory;
 	protected $guarded = [];
 
-	// User order(s)
-	public function user() {
-		return $this->belongsToMany( User::class );
+	public function customer() {
+		return $this->belongsTo( Customer::class );
 	}
 
-	// user orders product(s)
 	public function products() {
 		return $this->belongsToMany( Product::class )->withPivot( 'quantity' );
 	}

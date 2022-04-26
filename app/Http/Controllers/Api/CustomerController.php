@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class UserController extends Controller {
+class CustomerController extends Controller {
 
 	//TODO setup validation of inputs on client side + server side
 
 	public function purchase( Request $request ) {
 
 
-		$user = User::firstOrCreate( [
+		$customer = Customer::firstOrCreate( [
 			'email' => $request->input( 'email' )
 		], [
 			'password' => Hash::make( Str::random( 12 ) ),
@@ -27,11 +27,11 @@ class UserController extends Controller {
 		] );
 
 		try {
-			$payment = $user->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ) );
+			$payment = $customer->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ) );
 
 			$payment = $payment->asStripePaymentIntent();
 
-			$order = $user->orders()->create( [
+			$order = $customer->orders()->create( [
 				'transaction_id' => $payment->charges->data[0]->id,
 				'total'          => $payment->charges->data[0]->amount
 			] );
@@ -56,7 +56,7 @@ class UserController extends Controller {
 
 	}
 
-	// after successful purchase redirect user to order summary page
+	// after successful purchase redirect customer to order summary page
 	public function orderSummary( $order ) {
 
 		return inertia( 'Frontend/Order/Summary', [ 'order' => $order ] );
