@@ -16,7 +16,11 @@ class CreateProductsTable extends Migration {
 			$table->string( 'name' );
 			$table->string( 'slug' )->unique();
 			$table->text( 'description' );
+			$table->integer( 'available' )->default( 0 );
 			$table->integer( 'price' )->default( 0 );
+
+			// These columns are specific to events
+			$table->text( 'location' )->nullable();
 			$table->date( 'date' )->nullable();
 
 			$table->timestamps();
