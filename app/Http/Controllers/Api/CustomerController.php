@@ -8,6 +8,8 @@ use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Product;
+use App\Mail\OrderNotification;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerController extends Controller {
 
@@ -44,6 +46,10 @@ class CustomerController extends Controller {
 				Product::where( 'id', $item['id'] )->decrement( 'available', $item['quantity'] );
 			}
 
+			//Send email to customer
+			Mail::to( $request->input( 'email' ) )->send( new OrderNotification() );
+			//Todo add data to the email - Name, total, product, event date etc.
+			//TODO add ticket or something within the email
 
 			$order->load( 'products' );
 
