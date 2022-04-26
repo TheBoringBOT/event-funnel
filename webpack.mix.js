@@ -24,6 +24,7 @@ mix.js("resources/js/app.js", "public/js")
     .webpackConfig(require("./webpack.config"))
     .browserSync({
         proxy: "http://localhost:8000/",
+        notify: false,
     });
 
 if (mix.inProduction()) {
