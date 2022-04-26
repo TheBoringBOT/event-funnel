@@ -56,6 +56,13 @@
                                     class="mt-1"
                                     v-text="formatCurrency(product.price)"
                             ></p>
+                            <!--<p v-text="product.location"></p>-->
+                            <span
+                                    v-if="product.available <= 0"
+                                    class="text-red-600"
+                            >Sold Out</span
+                            >
+                            <span v-else v-text="product.available"></span>
                         </div>
                     </div>
                 </div>
