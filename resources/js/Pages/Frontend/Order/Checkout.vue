@@ -31,7 +31,53 @@
                     <tbody>
                         <tr v-for="(item, index) in cart" :key="item.id">
                             <td class="p-4" v-text="item.name"></td>
-                            <td class="p-4" v-text="item.quantity"></td>
+                            <td class="p-4">
+                                <div
+                                        class="flex justify-center w-1/5 space-x-4"
+                                >
+                                    <button
+                                            @click="
+                                            $store.commit(
+                                                'decreaseQuantity',
+                                                index
+                                            )
+                                        "
+                                    >
+                                        <svg
+                                                class="fill-current text-gray-600 w-3"
+                                                viewBox="0 0 448 512"
+                                        >
+                                            <path
+                                                    d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                            />
+                                        </svg>
+                                    </button>
+
+                                    <span v-text="item.quantity"></span>
+                                    <button
+                                            :class="[
+                                            item.available === item.quantity &&
+                                                'pointer-events-none opacity-50',
+                                        ]"
+                                            @click="
+                                            $store.commit(
+                                                'increaseQuantity',
+                                                index,
+                                                item
+                                            )
+                                        "
+                                    >
+                                        <svg
+                                                class="fill-current text-gray-600 w-3"
+                                                viewBox="0 0 448 512"
+                                        >
+                                            <path
+                                                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
                             <td class="p-4" v-text="cartLineTotal(item)"></td>
                             <td class="w-10 text-right">
                                 <button
@@ -56,7 +102,10 @@
                     </tbody>
                 </table>
             </div>
-            <form @submit.prevent="processPayment">
+            <form
+                    @submit.prevent="processPayment"
+                    :validation-schema="validationSchema"
+            >
                 <div class="lg:w-2/3 w-full mx-auto mt-8">
                     <div class="flex flex-wrap -mx-2 mt-8">
                         <div class="p-2 w-1/3">
@@ -66,7 +115,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >First Name</label
                                 >
-                                <input
+                                <Field
                                         type="text"
                                         id="first_name"
                                         name="first_name"
@@ -75,6 +124,7 @@
                                         v-model="customer.first_name"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="first_name"/>
                             </div>
                         </div>
                         <div class="p-2 w-1/3">
@@ -84,7 +134,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >Last Name</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="text"
                                         id="last_name"
@@ -93,6 +143,7 @@
                                         v-model="customer.last_name"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="last_name"/>
                             </div>
                         </div>
                         <div class="p-2 w-1/3">
@@ -102,7 +153,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >Email Address</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="email"
                                         id="email"
@@ -111,6 +162,7 @@
                                         v-model="customer.email"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="email"/>
                             </div>
                         </div>
                     </div>
@@ -122,7 +174,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >Street Address</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="text"
                                         id="address"
@@ -131,6 +183,7 @@
                                         v-model="customer.address"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="address"/>
                             </div>
                         </div>
                         <div class="p-2 w-1/3">
@@ -140,7 +193,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >City</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="text"
                                         id="city"
@@ -149,6 +202,7 @@
                                         v-model="customer.city"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="city"/>
                             </div>
                         </div>
                         <div class="p-2 w-1/6">
@@ -158,7 +212,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >State</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="text"
                                         id="state"
@@ -167,6 +221,7 @@
                                         v-model="customer.state"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="state"/>
                             </div>
                         </div>
                         <div class="p-2 w-1/6">
@@ -176,7 +231,7 @@
                                         class="leading-7 text-sm text-gray-600"
                                 >Zip Code</label
                                 >
-                                <input
+                                <Field
                                         required
                                         type="text"
                                         id="zip_code"
@@ -185,6 +240,7 @@
                                         v-model="customer.zip_code"
                                         :disabled="paymentProcessing"
                                 />
+                                <ErrorMessage name="zip_code"/>
                             </div>
                         </div>
                     </div>
@@ -219,13 +275,29 @@
 <script>
 import GuestLayout from "@/Layouts/Guest";
 import {loadStripe} from "@stripe/stripe-js";
+import {Field, Form, ErrorMessage} from "vee-validate";
+import * as yup from "yup";
 
 export default {
     components: {
+        Field,
+        Form,
+        ErrorMessage,
         GuestLayout,
     },
     data() {
+        //form validation using yup
+        const validationSchema = yup.object({
+            email: yup.string().required().email(),
+            first_name: yup.string().required(),
+            last_name: yup.string().required(),
+            address: yup.string().required(),
+            city: yup.string().required(),
+            state: yup.string().required(),
+            zip_code: yup.string().required(),
+        });
         return {
+            validationSchema,
             errors: [],
             stripe: {},
             cardElement: {},
@@ -242,17 +314,20 @@ export default {
         };
     },
     async mounted() {
-        this.stripe = await loadStripe(process.env.MIX_STRIPE_KEY);
+        //  if the cart has items then mount stripe
+        if (this.$store.state.cart.length !== 0) {
+            this.stripe = await loadStripe(process.env.MIX_STRIPE_KEY);
 
-        const elements = this.stripe.elements();
-        this.cardElement = elements.create("card", {
-            classes: {
-                base:
-                    "bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 p-3 leading-8 transition-colors duration-200 ease-in-out",
-            },
-        });
+            const elements = this.stripe.elements();
+            this.cardElement = elements.create("card", {
+                classes: {
+                    base:
+                        "bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 p-3 leading-8 transition-colors duration-200 ease-in-out",
+                },
+            });
 
-        this.cardElement.mount("#card-element");
+            this.cardElement.mount("#card-element");
+        }
     },
     methods: {
         // return cart amount
