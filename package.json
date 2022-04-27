@@ -40,6 +40,8 @@
         "@stripe/stripe-js": "^1.29.0",
         "@vue-stripe/vue-stripe": "^4.4.2",
         "browser-sync": "^2.27.9",
-        "vuex": "^4.0.2"
+        "vee-validate": "^4.5.11",
+        "vuex": "^4.0.2",
+        "yup": "^0.32.11"
     }
 }
