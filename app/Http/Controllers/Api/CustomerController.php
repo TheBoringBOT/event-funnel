@@ -17,6 +17,19 @@ class CustomerController extends Controller {
 
 	public function purchase( Request $request ) {
 
+		// Validation
+		$request->validate( [
+			'first_name' => 'required |string',
+			'last_name'  => 'required |string',
+			'address'    => 'required |string',
+			'city'       => 'required |string',
+			'state'      => 'required |string',
+			'zip_code'   => 'required |string',
+			'email'      => 'required|email',
+
+
+		] );
+
 
 		$customer = Customer::firstOrCreate( [
 			'email' => $request->input( 'email' )
@@ -30,7 +43,13 @@ class CustomerController extends Controller {
 		] );
 
 		try {
-			$payment = $customer->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ), [ 'receipt_email' => $request->input( 'email' ) ] );
+
+
+			$payment = $customer->charge( $request->input( 'amount' ), $request->input( 'payment_method_id' ), [
+				'receipt_email' => $request->input( 'email' ),
+				//TODO add description from cart items
+				//				'description'   => $description
+			] );
 
 			$payment = $payment->asStripePaymentIntent();
 
@@ -66,7 +85,7 @@ class CustomerController extends Controller {
 
 	// after successful purchase redirect customer to order summary page
 	public function orderSummary( $order ) {
-		dd( $customer->invoicePrice( $order ) );
+
 
 		return inertia( 'Frontend/Order/Summary', [ 'order' => $order ] );
 	}
